@@ -966,9 +966,12 @@ var Chess = function (fen) {
 
     /* if big pawn move, update the en passant square */
     if (move.flags & BITS.BIG_PAWN) {
-      if (turn === 'b') {
+      let side_pieces = [ board[move.to - 1], board[move.to + 1] ]
+      const is_white_pawn = (piece) => piece && piece.type === PAWN && piece.color === WHITE
+      const is_black_pawn = (piece) => piece && piece.type === PAWN && piece.color === BLACK
+      if (turn === 'b' && (is_white_pawn(side_pieces[0]) || is_white_pawn(side_pieces[1]))) {
         ep_square = move.to - 16
-      } else {
+      } else if (turn === 'w' && (is_black_pawn(side_pieces[0]) || is_black_pawn(side_pieces[1]))) {
         ep_square = move.to + 16
       }
     } else {
